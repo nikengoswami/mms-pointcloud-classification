@@ -1,0 +1,105 @@
+# Configuration file for MMS Point Cloud Classification
+
+# Model Configuration
+model:
+  name: "RandLA-Net"
+  num_classes: 5
+  num_features: 6  # XYZ + RGB (add +1 for intensity if available)
+  num_neighbors: 16
+  decimation: 4
+
+# Class Configuration
+classes:
+  names: ["Road", "Snow", "Vehicle", "Vegetation", "Others"]
+  colors:
+    Road: [0.5, 0.5, 0.5]      # Gray
+    Snow: [1.0, 1.0, 1.0]      # White
+    Vehicle: [1.0, 0.0, 0.0]   # Red
+    Vegetation: [0.0, 1.0, 0.0] # Green
+    Others: [0.5, 0.5, 0.0]    # Brown
+
+# Class Mapping from LAS standard classes to our classes
+class_mapping:
+  0: 4    # Never classified -> Others
+  1: 4    # Unclassified -> Others
+  2: 0    # Ground -> Road
+  3: 3    # Low Vegetation -> Vegetation
+  4: 3    # Medium Vegetation -> Vegetation
+  5: 3    # High Vegetation -> Vegetation
+  6: 4    # Building -> Others
+  7: 4    # Low Point (noise) -> Others
+  9: 4    # Water -> Others
+  10: 4   # Rail -> Others
+  11: 0   # Road Surface -> Road
+  17: 0   # Bridge Deck -> Road
+
+# Training Configuration
+training:
+  batch_size: 4
+  num_points: 4096
+  num_epochs: 100
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  num_workers: 4
+
+  # Data split ratios
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+  # Augmentation
+  augmentation:
+    rotation: true
+    rotation_range: 3.14159  # pi radians
+    scaling: true
+    scale_range: [0.9, 1.1]
+    jittering: true
+    jitter_sigma: 0.01
+    jitter_clip: 0.05
+    dropout: false
+    dropout_ratio: 0.2
+
+# Inference Configuration
+inference:
+  batch_size: 4096
+  overlap: 0.2
+  spatial_block_size: 50.0  # meters
+  use_spatial: false  # Set to true for very large files
+
+# Data Paths
+paths:
+  data_dir: "data"
+  raw_data: "data/raw"
+  labeled_data: "data/labeled"
+  processed_data: "data/processed"
+  checkpoints: "checkpoints"
+  results: "results"
+
+# Logging
+logging:
+  level: "INFO"
+  save_logs: true
+  log_dir: "logs"
+
+# Evaluation
+evaluation:
+  metrics:
+    - "accuracy"
+    - "mean_iou"
+    - "kappa"
+    - "f1_score"
+    - "precision"
+    - "recall"
+
+  confusion_matrix:
+    normalize: true
+    save_path: "results/confusion_matrix.png"
+
+  per_class_metrics:
+    save_path: "results/per_class_metrics.png"
+
+# Visualization
+visualization:
+  point_size: 1.0
+  background: "white"  # or "black"
+  save_dpi: 300
