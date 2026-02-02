@@ -31,19 +31,21 @@ ORIGINAL_CLASSES = {
     54: "Vehicle (other)",
 }
 
-# Target 5 classes for RandLA-Net
+# Target 6 classes for PointNet++/RandLA-Net
 TARGET_CLASSES = {
     0: "Road",
     1: "Snow",
     2: "Vehicle",
     3: "Vegetation",
-    4: "Others"
+    4: "Building",
+    5: "Others"
 }
 
 # Mapping from original classes to target classes
 CLASS_MAPPING = {
     # Unclassified -> Others
-    1: 4,
+    0: 5,   # Unclassified
+    1: 5,   # Unclassified
 
     # Ground -> Road
     2: 0,
@@ -52,14 +54,14 @@ CLASS_MAPPING = {
     3: 3,  # Low veg
     5: 3,  # High veg
 
-    # Building -> Others
+    # Building -> Building (NEW CLASS!)
     6: 4,
 
-    # Noise (falling snow) -> Snow
-    7: 1,
+    # Noise (falling snow) -> Others
+    7: 5,
 
     # Water -> Others
-    9: 4,
+    9: 5,
 
     # All Road surfaces -> Road
     11: 0,  # Dry
@@ -72,12 +74,12 @@ CLASS_MAPPING = {
     32: 1,  # Snow
 
     # Infrastructure -> Others
-    35: 4,  # Sign pole
-    36: 4,  # Utility pole
-    37: 4,  # Overhead road sign
-    38: 4,  # Guardrail
-    41: 4,  # Fence
-    42: 4,  # Wire
+    35: 5,  # Sign pole
+    36: 5,  # Utility pole
+    37: 5,  # Overhead road sign
+    38: 5,  # Guardrail
+    41: 5,  # Fence
+    42: 5,  # Wire
     43: 0,  # Overpass bridge -> Road (it's a road structure)
 
     # All Vehicles -> Vehicle
@@ -98,10 +100,10 @@ def get_class_distribution_summary(original_classes, original_counts):
     Returns:
         Dictionary with target class distributions
     """
-    target_distribution = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0}
+    target_distribution = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 
     for orig_cls, count in zip(original_classes, original_counts):
-        target_cls = CLASS_MAPPING.get(int(orig_cls), 4)  # Default to Others
+        target_cls = CLASS_MAPPING.get(int(orig_cls), 5)  # Default to Others
         target_distribution[target_cls] += count
 
     return target_distribution
