@@ -1,5 +1,5 @@
 <div align="center">
-
+This project demonstrates scalable 3D perception systems for applications in autonomous driving, smart cities, and infrastructure monitoring.
 # 🚀 MMS Point Cloud Classification with Deep Learning
 
 ### Automatic semantic segmentation of Mobile Mapping System data using hierarchical neural networks
